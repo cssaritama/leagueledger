@@ -1,0 +1,305 @@
+openapi: 3.1.0
+info:
+  title: LeagueLedger API
+  description: Matches are recorded as immutable facts. The league table is derived
+    from them on every read and is never stored.
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      tags:
+      - meta
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /teams:
+    get:
+      tags:
+      - teams
+      summary: List Teams
+      operationId: list_teams_teams_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TeamOut'
+                type: array
+                title: Response List Teams Teams Get
+    post:
+      tags:
+      - teams
+      summary: Create Team
+      operationId: create_team_teams_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /matches:
+    get:
+      tags:
+      - matches
+      summary: List Matches
+      operationId: list_matches_matches_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/MatchOut'
+                type: array
+                title: Response List Matches Matches Get
+    post:
+      tags:
+      - matches
+      summary: Create Match
+      operationId: create_match_matches_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /matches/{match_id}:
+    delete:
+      tags:
+      - matches
+      summary: Delete Match
+      operationId: delete_match_matches__match_id__delete
+      parameters:
+      - name: match_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Match Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /standings:
+    get:
+      tags:
+      - standings
+      summary: Get Standings
+      description: 'Recompute the table from the recorded matches.
+
+
+        Nothing here is cached. The endpoint is a thin adapter around the pure
+
+        function in app.standings, which holds all the league rules.'
+      operationId: get_standings_standings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/StandingOut'
+                type: array
+                title: Response Get Standings Standings Get
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MatchCreate:
+      properties:
+        home_team_id:
+          type: integer
+          title: Home Team Id
+        away_team_id:
+          type: integer
+          title: Away Team Id
+        home_goals:
+          type: integer
+          maximum: 99.0
+          minimum: 0.0
+          title: Home Goals
+        away_goals:
+          type: integer
+          maximum: 99.0
+          minimum: 0.0
+          title: Away Goals
+      type: object
+      required:
+      - home_team_id
+      - away_team_id
+      - home_goals
+      - away_goals
+      title: MatchCreate
+    MatchOut:
+      properties:
+        id:
+          type: integer
+          title: Id
+        home_team:
+          type: string
+          title: Home Team
+        away_team:
+          type: string
+          title: Away Team
+        home_goals:
+          type: integer
+          title: Home Goals
+        away_goals:
+          type: integer
+          title: Away Goals
+        played_at:
+          type: string
+          format: date-time
+          title: Played At
+      type: object
+      required:
+      - id
+      - home_team
+      - away_team
+      - home_goals
+      - away_goals
+      - played_at
+      title: MatchOut
+    StandingOut:
+      properties:
+        position:
+          type: integer
+          title: Position
+        team:
+          type: string
+          title: Team
+        played:
+          type: integer
+          title: Played
+        won:
+          type: integer
+          title: Won
+        drawn:
+          type: integer
+          title: Drawn
+        lost:
+          type: integer
+          title: Lost
+        goals_for:
+          type: integer
+          title: Goals For
+        goals_against:
+          type: integer
+          title: Goals Against
+        goal_difference:
+          type: integer
+          title: Goal Difference
+        points:
+          type: integer
+          title: Points
+      type: object
+      required:
+      - position
+      - team
+      - played
+      - won
+      - drawn
+      - lost
+      - goals_for
+      - goals_against
+      - goal_difference
+      - points
+      title: StandingOut
+    TeamCreate:
+      properties:
+        name:
+          type: string
+          maxLength: 60
+          minLength: 1
+          title: Name
+      type: object
+      required:
+      - name
+      title: TeamCreate
+    TeamOut:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: TeamOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+
