@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: leagueledger-postgres
+    environment:
+      POSTGRES_DB: leagueledger
+      POSTGRES_USER: leagueledger
+      POSTGRES_PASSWORD: leagueledger
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+    container_name: leagueledger-api
+    environment:
+      DATABASE_URL: postgresql+psycopg://leagueledger:leagueledger@postgres:5432/leagueledger
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:

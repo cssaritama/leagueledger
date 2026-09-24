@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leagueledger-api
+  namespace: leagueledger
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: leagueledger-api
+  template:
+    metadata:
+      labels:
+        app: leagueledger-api
+    spec:
+      containers:
+      - name: api
+        image: leagueledger:local
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
