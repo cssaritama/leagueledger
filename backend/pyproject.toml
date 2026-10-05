@@ -1,6 +1,6 @@
 [project]
 name = "leagueledger-backend"
-version = "1.0.2"
+version = "1.0.3"
 description = "LeagueLedger API - matches are facts, standings are derived"
 requires-python = ">=3.11"
 authors = [{ name = "Carlos Saritama" }]

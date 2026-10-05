@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3] - 2026-10-05
+
+### Fixed
+
+- Pinned `astral-sh/setup-uv` to a valid immutable commit in GitHub Actions.
+- Restored backend and PostgreSQL CI job startup.
+
+
 ## [1.0.2] - 2026-10-05
 
 ### Fixed

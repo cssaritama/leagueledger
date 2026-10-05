@@ -3,7 +3,7 @@ info:
   title: LeagueLedger API
   description: Football competition API where match results are the source of truth
     and standings are derived on every read.
-  version: 1.0.2
+  version: 1.0.3
 paths:
   /health:
     get:

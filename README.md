@@ -5,7 +5,7 @@
 [![CI](https://github.com/cssaritama/leagueledger/actions/workflows/ci.yml/badge.svg)](https://github.com/cssaritama/leagueledger/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Portfolio release:** `v1.0.2`
+**Portfolio release:** `v1.0.3`
 
 LeagueLedger manages teams, match results and league standings through a small full-stack application built with React, FastAPI and SQLAlchemy. Its central design decision is deliberately simple: **the league table is never stored as independent state**. The system records match facts and recalculates standings from those facts on every read.
 
