@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init
+  namespace: leagueledger
+spec:
+  backoffLimit: 4
+  template:
+    metadata:
+      labels:
+        app: db-init
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: db-init
+          image: leagueledger-api:local
+          imagePullPolicy: IfNotPresent
+          command:
+            - /app/.venv/bin/python
+            - -c
+            - from app.db import init_db; init_db()
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: leagueledger-postgres
+                  key: DATABASE_URL
