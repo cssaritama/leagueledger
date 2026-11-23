@@ -3,7 +3,10 @@
 ## Routine checks
 
 - Keep the default branch green in GitHub Actions.
-- Review Dependabot updates monthly rather than merging them blindly.
+- Review Dependabot updates monthly rather than merging them blindly. Patch
+  and minor updates merge when CI passes. Major updates of the runtimes and
+  libraries are not proposed by Dependabot; each one is a planned upgrade
+  tracked as a GitHub issue, with its own tests.
 - Run `make test` before each release.
 - Run the Docker smoke test whenever container or networking configuration changes.
 - Run the local `kind` deployment after changes to Kubernetes manifests.
