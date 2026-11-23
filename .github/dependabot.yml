@@ -1,21 +1,37 @@
 version: 2
+# Patch and minor updates arrive monthly and merge when CI passes. Major
+# updates (for example Python 3.12 to 3.15, Node 22 to 26, Starlette 0.x to 1.x)
+# are not proposed: each one is a planned upgrade with its own tests, tracked in
+# the repository's GitHub issues.
 updates:
   - package-ecosystem: pip
     directory: /backend
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: npm
     directory: /frontend
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: docker
     directory: /backend
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: docker
     directory: /frontend
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
